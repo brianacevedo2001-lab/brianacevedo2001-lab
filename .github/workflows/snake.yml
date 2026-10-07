@@ -1,4 +1,4 @@
-name: Snake de contribuciones
+name: Snake y estadísticas
 
 on:
   schedule:
@@ -15,7 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Generar SVGs
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generar tarjeta de estadísticas
+        run: node build/stats.js ${{ github.repository_owner }} dist/stats.svg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generar snake
         uses: Platane/snk@v3
         with:
           github_user_name: ${{ github.repository_owner }}
